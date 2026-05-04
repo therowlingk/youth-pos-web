@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+:root {
+  --background: #080706;
+  --foreground: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: #d6b26e;
+  color: black;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(24px);
+}
+
+.luxury-glass {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.045)),
+    rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(28px);
+}
+
+.gold-text {
+  background: linear-gradient(90deg, #f7e7b6, #d6b26e, #fff7db);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.luxury-noise {
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(214, 178, 110, 0.22), transparent 32%),
+    radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.1), transparent 28%),
+    radial-gradient(circle at 70% 80%, rgba(214, 178, 110, 0.12), transparent 34%),
+    linear-gradient(135deg, #080706, #12100d 40%, #050505);
+}
+
+.grid-luxury {
+  background-image:
+    linear-gradient(rgba(214, 178, 110, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(214, 178, 110, 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(circle at center, black, transparent 75%);
+}
+
+@keyframes float-lux {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-22px) rotate(4deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-130%);
+  }
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(38px) scale(0.98);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+    filter: blur(0);
+  }
+}
+
+.animate-float-lux {
+  animation: float-lux 8s ease-in-out infinite;
+}
+
+.reveal-card {
+  animation: reveal-up 0.85s ease both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 32%;
+}
+
+.shine-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-effect::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.28),
+    transparent
+  );
+  transform: translateX(-130%);
+  animation: shine 4.5s ease-in-out infinite;
+}
+.ecom-bg {
+  background:
+    radial-gradient(circle at 12% 15%, rgba(255, 218, 151, 0.55), transparent 28%),
+    radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.9), transparent 26%),
+    radial-gradient(circle at 75% 85%, rgba(255, 195, 113, 0.3), transparent 32%),
+    linear-gradient(135deg, #fffaf0 0%, #fff4de 42%, #f9efe0 100%);
+}
+
+.ecom-card {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(120, 78, 28, 0.12);
+  backdrop-filter: blur(24px);
+  box-shadow: 0 24px 80px rgba(77, 47, 16, 0.12);
+}
+
+.ecom-glow {
+  box-shadow:
+    0 20px 70px rgba(214, 168, 79, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(90deg, #7b4f13, #d6a84f, #9a681f);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@keyframes soft-float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-18px) rotate(3deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes scroll-pop {
+  from {
+    opacity: 0;
+    transform: translateY(38px) scale(0.96);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes marquee-slow {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.float-soft {
+  animation: soft-float 7s ease-in-out infinite;
+}
+
+.scroll-reveal {
+  animation: scroll-pop 0.85s ease both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 30%;
+}
+
+.marquee-track {
+  animation: marquee-slow 22s linear infinite;
+}
+
+.shine-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.55),
+    transparent
+  );
+  transform: translateX(-140%);
+  animation: shine 4s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-140%);
+  }
+  100% {
+    transform: translateX(240%);
+  }
+}
