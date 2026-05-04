@@ -30,6 +30,17 @@ export const initialUsers: AppUser[] = [
   },
   {
     id: 2,
+    name: "Admin Master",
+    fullName: "Admin Master",
+    nickname: "Master",
+    email: "master@aipos.com",
+    password: "master123",
+    role: "admin-master",
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 3,
     name: "Kasir Demo",
     fullName: "Kasir Demo",
     nickname: "Kasir",
@@ -40,7 +51,7 @@ export const initialUsers: AppUser[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: 3,
+    id: 4,
     name: "Member Demo",
     fullName: "Member Demo",
     nickname: "Member",

@@ -227,3 +227,159 @@ body {
     transform: translateX(240%);
   }
 }
+.ocean-bg,
+.ecom-bg {
+  background:
+    radial-gradient(circle at 12% 15%, rgba(125, 211, 252, 0.65), transparent 28%),
+    radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.95), transparent 26%),
+    radial-gradient(circle at 72% 82%, rgba(14, 165, 233, 0.25), transparent 34%),
+    linear-gradient(135deg, #ecfeff 0%, #e0f2fe 38%, #f8fafc 100%);
+}
+
+.ocean-card,
+.ecom-card {
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(14, 116, 144, 0.14);
+  backdrop-filter: blur(24px);
+  box-shadow: 0 24px 80px rgba(3, 105, 161, 0.14);
+}
+
+.ocean-glow,
+.ecom-glow {
+  box-shadow:
+    0 20px 80px rgba(14, 165, 233, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.ocean-gradient-text,
+.gold-gradient-text {
+  background: linear-gradient(90deg, #0369a1, #06b6d4, #0f766e);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@keyframes ocean-float {
+  0% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-18px) translateX(10px) rotate(3deg);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+}
+
+@keyframes ocean-wave {
+  0% {
+    transform: translateX(-20%) translateY(0);
+  }
+  50% {
+    transform: translateX(0%) translateY(-8px);
+  }
+  100% {
+    transform: translateX(-20%) translateY(0);
+  }
+}
+
+@keyframes bubble-up {
+  0% {
+    transform: translateY(40px) scale(0.8);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: translateY(-80px) scale(1.1);
+    opacity: 0;
+  }
+}
+
+@keyframes scroll-pop {
+  from {
+    opacity: 0;
+    transform: translateY(36px) scale(0.96);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.float-soft {
+  animation: ocean-float 7s ease-in-out infinite;
+}
+
+.scroll-reveal {
+  animation: scroll-pop 0.85s ease both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 30%;
+}
+
+.ocean-wave-layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 120px;
+  background:
+    radial-gradient(70px 34px at 40px 40px, rgba(14, 165, 233, 0.25), transparent 70%),
+    radial-gradient(90px 40px at 140px 55px, rgba(6, 182, 212, 0.22), transparent 70%),
+    radial-gradient(110px 48px at 260px 45px, rgba(59, 130, 246, 0.18), transparent 70%);
+  background-size: 320px 120px;
+  animation: ocean-wave 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(14, 165, 233, 0.18);
+  animation: bubble-up 5s ease-in-out infinite;
+}
+
+.marquee-track {
+  animation: marquee-slow 22s linear infinite;
+}
+
+@keyframes marquee-slow {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.shine-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.55),
+    transparent
+  );
+  transform: translateX(-140%);
+  animation: shine 4s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-140%);
+  }
+  100% {
+    transform: translateX(240%);
+  }
+}

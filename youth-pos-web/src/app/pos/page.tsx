@@ -101,9 +101,11 @@ export default function PosPage() {
 
   const user = JSON.parse(userRaw);
 
-  if (user.role !== "cashier") {
+  const isCashier = user.role === "cashier" || user.role === "Kasir";
+
+  if (!isCashier) {
     alert("Akses ditolak. Halaman POS khusus kasir.");
-    router.push("/choose-role");
+    router.push("/");
   }
 }, [router]);
 
@@ -171,7 +173,7 @@ export default function PosPage() {
   localStorage.removeItem("aipos_current_user");
   localStorage.removeItem("youth_pos_user");
   router.push("/");
-  }
+}
 
   function addToCart(product: Product) {
     if (product.stock <= 0) {
@@ -513,7 +515,7 @@ export default function PosPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#050510] text-white">
+    <main className="min-h-screen bg-gradient-to-br from-[#031826] via-[#06243a] to-[#083344] text-white">
       <div className="fixed inset-0 -z-10 noise" />
       <div className="fixed inset-0 -z-10 grid-glow opacity-60" />
 
@@ -523,10 +525,10 @@ export default function PosPage() {
       <div className="fixed inset-0 -z-10 noise" />
 
       <div className="mx-auto max-w-7xl px-5 py-6">
-        <nav className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <nav className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 className="text-3xl font-black">Cashier POS</h1>
-            <p className="text-white/45">
+            <h1 className="text-2xl font-black">Cashier POS</h1>
+            <p className="text-sm text-white/45">
               Transaksi, pembayaran, barcode, produk, dan laporan.
             </p>
           </div>
@@ -595,21 +597,21 @@ export default function PosPage() {
                 />
               </div>
 
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-4">
                 {filteredProducts.map((item) => (
                   <button
                     key={item.id}
                     onClick={() => addToCart(item)}
-                    className="rounded-3xl border border-white/10 bg-white/[0.06] p-5 text-left transition hover:-translate-y-1 hover:bg-white/[0.1]"
+                    className="rounded-2xl border border-white/10 bg-white/[0.06] p-3 text-left transition hover:-translate-y-0.5 hover:bg-white/[0.1]"
                   >
                     <div
-                      className={`mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${item.badgeColor} text-4xl`}
+                      className={`mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${item.badgeColor} text-3xl`}
                     >
                       {item.image}
                     </div>
 
                     <p className="text-sm text-white/45">{item.sku}</p>
-                    <h3 className="text-lg font-black">{item.name}</h3>
+                    <h3 className="text-sm font-black">{item.name}</h3>
                     <p className="text-sm text-white/45">{item.category}</p>
 
                     <div className="mt-4 flex items-end justify-between">
@@ -675,7 +677,7 @@ export default function PosPage() {
 
               <button
                 onClick={scanBarcode}
-                className="rounded-3xl bg-gradient-to-r from-fuchsia-500 to-cyan-400 px-6 py-4 font-black"
+                className="rounded-3xl bg-gradient-to-r from-cyan-400 to-blue-600 px-6 py-4 font-black"
               >
                 Tambah ke Cart
               </button>
@@ -930,7 +932,7 @@ function TabButton({
   return (
     <button
       onClick={onClick}
-      className={`flex shrink-0 items-center gap-2 rounded-2xl px-4 py-3 text-sm font-bold transition ${
+      className={`flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition ${
         active
           ? "bg-white text-black"
           : "bg-white/10 text-white hover:bg-white/15"
@@ -982,14 +984,14 @@ function CartPanel({
   change: number;
 }) {
   return (
-    <aside className="glass h-fit rounded-[2rem] p-5">
+    <aside className="glass h-fit rounded-2xl p-4">
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-black">
             <ShoppingCart />
           </div>
           <div>
-            <h2 className="text-2xl font-black">Cart</h2>
+            <h2 className="text-xl font-black">Cart</h2>
             <p className="text-sm text-white/45">{cart.length} jenis item</p>
           </div>
         </div>
@@ -1008,7 +1010,7 @@ function CartPanel({
         {cart.map((item) => (
           <div
             key={item.id}
-            className="rounded-2xl border border-white/10 bg-black/25 p-4"
+            className="rounded-xl border border-white/10 bg-black/25 p-3"
           >
             <div className="flex justify-between gap-3">
               <div>
@@ -1177,7 +1179,7 @@ function CartPanel({
         <button
           onClick={checkout}
           disabled={!canCheckout}
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-cyan-400 py-4 font-black disabled:cursor-not-allowed disabled:opacity-40"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-500 to-cyan-400 py-3 text-sm font-black disabled:cursor-not-allowed disabled:opacity-40"
         >
           <Receipt size={19} />
           Checkout & Cetak Struk

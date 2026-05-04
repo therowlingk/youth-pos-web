@@ -149,11 +149,14 @@ if (savedOnlineOrders) {
 }
     const user = JSON.parse(userRaw);
 
-    if (user.role !== "admin-master") {
-      alert("Akses ditolak. Halaman ini khusus Admin Master.");
-      router.push("/login");
-      return;
-    }
+    const isAdminMaster =
+  user.role === "admin-master" || user.role === "Admin Master";
+
+if (!isAdminMaster) {
+  alert("Akses ditolak. Halaman ini khusus Admin Master.");
+  router.push("/");
+  return;
+}
 
     const savedProducts = localStorage.getItem("youth_pos_products");
     const savedArticles = localStorage.getItem("youth_pos_articles");

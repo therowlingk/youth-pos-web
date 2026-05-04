@@ -19,6 +19,11 @@ import {
   Store,
   UserPlus,
   X,
+  Waves,
+Shell,
+Fish,
+Anchor,
+Sailboat,
 } from "lucide-react";
 import AiPosLogo from "@/components/AiPosLogo";
 import { products as initialProducts, Product } from "@/data/products";
@@ -84,11 +89,25 @@ export default function HomePage() {
     }
 
     if (savedUsers) {
-      setUsers(JSON.parse(savedUsers));
-    } else {
-      setUsers(initialUsers);
-      localStorage.setItem("aipos_users", JSON.stringify(initialUsers));
-    }
+        const parsedUsers: AppUser[] = JSON.parse(savedUsers);
+
+         const mergedUsers = [
+         ...parsedUsers,
+         ...initialUsers.filter(
+         (defaultUser) =>
+        !parsedUsers.some(
+          (savedUser) =>
+            savedUser.email.toLowerCase() === defaultUser.email.toLowerCase()
+        )
+       ),
+    ];
+
+  setUsers(mergedUsers);
+  localStorage.setItem("aipos_users", JSON.stringify(mergedUsers));
+} else {
+  setUsers(initialUsers);
+  localStorage.setItem("aipos_users", JSON.stringify(initialUsers));
+}
 
     if (savedLocations) {
       setLocations(JSON.parse(savedLocations));
@@ -147,58 +166,71 @@ export default function HomePage() {
   }
 
   function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    setLoginError("");
+  e.preventDefault();
+  setLoginError("");
 
-    const user = users.find(
-      (item) =>
-        item.email.toLowerCase() === loginEmail.toLowerCase() &&
-        item.password === loginPassword &&
-        item.isActive
-    );
+  const mergedUsers = [
+    ...users,
+    ...initialUsers.filter(
+      (defaultUser) =>
+        !users.some(
+          (savedUser) =>
+            savedUser.email.toLowerCase() === defaultUser.email.toLowerCase()
+        )
+    ),
+  ];
 
-    if (!user) {
-      setLoginError("Email atau password salah, atau akun belum aktif.");
-      return;
-    }
+  localStorage.setItem("aipos_users", JSON.stringify(mergedUsers));
 
-    localStorage.setItem(
-      "aipos_current_user",
-      JSON.stringify({
-        id: user.id,
-        name: user.nickname || user.name,
-        fullName: user.fullName || user.name,
-        email: user.email,
-        role: user.role,
-        kosLocationId: user.kosLocationId,
-        kosLabel: user.kosLabel,
-        manualAddress: user.manualAddress,
-      })
-    );
+  const user = mergedUsers.find(
+    (item) =>
+      item.email.toLowerCase().trim() === loginEmail.toLowerCase().trim() &&
+      item.password === loginPassword &&
+      item.isActive
+  );
 
-    localStorage.setItem(
-      "youth_pos_user",
-      JSON.stringify({
-        id: user.id,
-        name: user.nickname || user.name,
-        fullName: user.fullName || user.name,
-        email: user.email,
-        role: user.role,
-      })
-    );
-
-    if (user.role === "admin-master") {
-      router.push("/admin-master");
-      return;
-    }
-
-    if (user.role === "cashier") {
-      router.push("/pos");
-      return;
-    }
-
-    router.push("/member");
+  if (!user) {
+    setLoginError("Email atau password salah, atau akun belum aktif.");
+    return;
   }
+
+  localStorage.setItem(
+    "aipos_current_user",
+    JSON.stringify({
+      id: user.id,
+      name: user.nickname || user.name,
+      fullName: user.fullName || user.name,
+      email: user.email,
+      role: user.role,
+      kosLocationId: user.kosLocationId,
+      kosLabel: user.kosLabel,
+      manualAddress: user.manualAddress,
+    })
+  );
+
+  localStorage.setItem(
+    "youth_pos_user",
+    JSON.stringify({
+      id: user.id,
+      name: user.nickname || user.name,
+      fullName: user.fullName || user.name,
+      email: user.email,
+      role: user.role,
+    })
+  );
+
+  if (user.role === "admin-master") {
+    router.push("/admin-master");
+    return;
+  }
+
+  if (user.role === "cashier") {
+    router.push("/pos");
+    return;
+  }
+
+  router.push("/member");
+}
 
   function handleRegister(e: React.FormEvent) {
     e.preventDefault();
@@ -281,62 +313,67 @@ export default function HomePage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden ecom-bg text-[#241b12]">
+    <main className="relative min-h-screen overflow-hidden ocean-bg text-[#06243a]">
       <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute left-[8%] top-[12%] h-80 w-80 rounded-full bg-[#f2c879]/45 blur-[110px] float-soft" />
-        <div className="absolute right-[6%] top-[20%] h-96 w-96 rounded-full bg-white/70 blur-[120px]" />
-        <div className="absolute bottom-[6%] left-[38%] h-72 w-72 rounded-full bg-[#d6a84f]/20 blur-[110px]" />
-      </div>
+  <div className="absolute left-[8%] top-[12%] h-80 w-80 rounded-full bg-cyan-300/45 blur-[110px] float-soft" />
+  <div className="absolute right-[6%] top-[20%] h-96 w-96 rounded-full bg-white/80 blur-[120px]" />
+  <div className="absolute bottom-[6%] left-[38%] h-72 w-72 rounded-full bg-blue-300/25 blur-[110px]" />
 
-      <nav className="sticky top-0 z-40 border-b border-[#8a5a1c]/10 bg-white/65 backdrop-blur-2xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
-          <AiPosLogo dark />
+  <span className="bubble left-[12%] top-[70%] h-5 w-5" />
+  <span className="bubble left-[24%] top-[78%] h-3 w-3" style={{ animationDelay: "1s" }} />
+  <span className="bubble right-[18%] top-[72%] h-6 w-6" style={{ animationDelay: "1.7s" }} />
+  <span className="bubble right-[32%] top-[82%] h-4 w-4" style={{ animationDelay: "2.4s" }} />
+</div>
+      
+      <nav className="sticky top-0 z-40 border-b border-black/10 bg-white/80 backdrop-blur-2xl">
+  <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+    <AiPosLogo dark />
 
-          <div className="hidden items-center gap-7 text-sm font-semibold text-black/55 md:flex">
-            <a href="#promo" className="hover:text-[#9a681f]">
-              Promo
-            </a>
-            <a href="#best-seller" className="hover:text-[#9a681f]">
-              Best Seller
-            </a>
-            <a href="#stock" className="hover:text-[#9a681f]">
-              Live Stock
-            </a>
-          </div>
+    <div className="hidden items-center gap-5 text-xs font-bold uppercase tracking-[0.14em] text-black/50 md:flex">
+      <a href="#promo" className="hover:text-[#0369a1]">
+        Promo
+      </a>
+      <a href="#best-seller" className="hover:text-[#0369a1]">
+        Best Seller
+      </a>
+      <a href="#stock" className="hover:text-[#0369a1]">
+        Stock
+      </a>
+    </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={openLogin}
-              className="rounded-full border border-black/10 bg-white px-5 py-3 text-sm font-black text-black shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
-            >
-              Login
-            </button>
+    <div className="flex items-center gap-2">
+      <button
+        onClick={openLogin}
+        className="rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-black text-black shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+      >
+        Login
+      </button>
 
-            <button
-              onClick={openRegister}
-              className="shine-button rounded-full bg-[#1f1a14] px-5 py-3 text-sm font-black text-white shadow-xl shadow-black/15 transition hover:-translate-y-0.5"
-            >
-              Daftar
-            </button>
-          </div>
-        </div>
-      </nav>
+      <button
+        onClick={openRegister}
+        className="rounded-full bg-[#06243a] px-4 py-2 text-xs font-black text-white shadow-md transition hover:-translate-y-0.5"
+      >
+        Daftar
+      </button>
+    </div>
+  </div>
+</nav>
 
-      <section className="mx-auto grid max-w-7xl items-center gap-10 px-5 pb-16 pt-12 lg:grid-cols-[1.1fr_0.9fr] lg:pt-20">
+      <section className="mx-auto grid max-w-7xl items-center gap-8 px-4 pb-10 pt-10 lg:grid-cols-[1.05fr_0.95fr] lg:pt-14">
         <div className="scroll-reveal">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#d6a84f]/30 bg-white/70 px-4 py-2 text-sm font-black text-[#8a5a1c] shadow-sm">
-            <Sparkles size={16} />
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#0ea5e9]/30 bg-white/70 px-4 py-2 text-sm font-black text-[#075985] shadow-sm">
+            <Waves size={16} />
             Warung online dengan pickup cepat
           </div>
 
-          <h1 className="max-w-4xl text-5xl font-black leading-[0.95] tracking-tight text-[#1f1a14] md:text-7xl">
+          <h1 className="max-w-3xl text-4xl font-black leading-[1] tracking-tight text-[#06243a] md:text-6xl">
             Belanja menu favorit,{" "}
             <span className="gold-gradient-text">cek stok live</span>, ambil di
             warung.
           </h1>
 
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-black/55">
-            AI POS menampilkan promo, best seller, dan stok barang secara public.
+          <p className="mt-5 max-w-2xl text-base leading-7 text-black/55">
+            aiman pos menampilkan promo, best seller, dan stok barang secara public.
             Member bisa daftar, pilih kos atau isi alamat manual, lalu pesan
             online untuk diambil di warung.
           </p>
@@ -344,7 +381,7 @@ export default function HomePage() {
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <button
               onClick={openRegister}
-              className="shine-button group inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1f1a14] px-6 py-4 font-black text-white shadow-2xl shadow-black/20 transition hover:-translate-y-1"
+              className="shine-button group inline-flex items-center justify-center gap-2 rounded-xl bg-[#06243a] px-5 py-3 text-sm font-black text-white shadow-xl shadow-black/15 transition hover:-translate-y-0.5"
             >
               Daftar Member
               <ArrowRight
@@ -355,7 +392,7 @@ export default function HomePage() {
 
             <a
               href="#stock"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-black/10 bg-white/75 px-6 py-4 font-black text-black shadow-sm backdrop-blur transition hover:-translate-y-1 hover:shadow-lg"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-black/10 bg-white/75 px-5 py-3 text-sm font-black text-black shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:shadow-md"
             >
               Cek Live Stock
             </a>
@@ -369,7 +406,7 @@ export default function HomePage() {
         </div>
 
         <div className="scroll-reveal ecom-card ecom-glow rounded-[2.5rem] p-5">
-          <div className="overflow-hidden rounded-[2rem] bg-[#1f1a14] text-white">
+          <div className="overflow-hidden rounded-[2rem] bg-[#06243a] text-white">
             <div className="border-b border-white/10 p-5">
               <p className="text-sm text-white/45">Live Catalogue</p>
               <div className="mt-2 flex items-center justify-between">
@@ -422,12 +459,14 @@ export default function HomePage() {
 
             <div className="rounded-3xl bg-white p-5 shadow-sm">
               <p className="text-sm text-black/45">Pickup Area</p>
-              <p className="mt-2 text-3xl font-black text-[#9a681f]">Kos</p>
+              <p className="mt-2 text-3xl font-black text-[#0369a1]">Kos</p>
             </div>
           </div>
         </div>
       </section>
-
+<div className="relative h-20 overflow-hidden">
+  <div className="ocean-wave-layer" />
+</div>
       <section className="border-y border-black/10 bg-white/45 py-4 backdrop-blur">
         <div className="overflow-hidden">
           <div className="marquee-track flex w-max gap-8 px-5 text-sm font-black uppercase tracking-[0.2em] text-black/45">
@@ -517,7 +556,7 @@ export default function HomePage() {
                   {item.image}
                 </div>
 
-                <div className="rounded-full bg-[#d6a84f]/15 px-3 py-1 text-sm font-black text-[#8a5a1c]">
+                <div className="rounded-full bg-[#0ea5e9]/15 px-3 py-1 text-sm font-black text-[#075985]">
                   #{index + 1}
                 </div>
               </div>
@@ -561,7 +600,7 @@ export default function HomePage() {
                   {item.image}
                 </div>
 
-                <div className="rounded-full bg-[#1f1a14] px-4 py-2 text-sm font-black text-white">
+                <div className="rounded-full bg-[#06243a] px-4 py-2 text-sm font-black text-white">
                   -{item.discount}%
                 </div>
               </div>
@@ -577,12 +616,12 @@ export default function HomePage() {
                       {formatRupiah(item.normalPrice)}
                     </p>
                   )}
-                  <p className="text-2xl font-black text-[#9a681f]">
+                  <p className="text-2xl font-black text-[#0369a1]">
                     {formatRupiah(item.price)}
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-[#fff5df] px-4 py-3 text-right">
+                <div className="rounded-2xl bg-[#e0f2fe] px-4 py-3 text-right">
                   <p className="text-xs text-black/40">Stock</p>
                   <p className="font-black">{item.stock}</p>
                 </div>
@@ -629,7 +668,7 @@ export default function HomePage() {
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="text-lg font-black">{item.name}</h3>
                       {item.isPromo && (
-                        <span className="rounded-full bg-[#d6a84f]/20 px-3 py-1 text-xs font-bold text-[#8a5a1c]">
+                        <span className="rounded-full bg-[#0ea5e9]/20 px-3 py-1 text-xs font-bold text-[#075985]">
                           Promo
                         </span>
                       )}
@@ -645,7 +684,7 @@ export default function HomePage() {
                   <p className="font-black">{formatRupiah(item.price)}</p>
                 </div>
 
-                <div className="flex items-center justify-between gap-4 rounded-2xl bg-[#fff5df] px-4 py-3 md:min-w-44">
+                <div className="flex items-center justify-between gap-4 rounded-2xl bg-[#e0f2fe] px-4 py-3 md:min-w-44">
                   <div>
                     <p className="text-xs text-black/40">Stock</p>
                     <p className="text-2xl font-black">{item.stock}</p>
@@ -673,9 +712,9 @@ export default function HomePage() {
 
       <button
         onClick={openRegister}
-        className="shine-button fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full bg-[#1f1a14] px-5 py-4 font-black text-white shadow-2xl shadow-black/25 transition hover:scale-105"
+        className="shine-button fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full bg-[#06243a] px-5 py-4 font-black text-white shadow-2xl shadow-black/25 transition hover:scale-105"
       >
-        <UserPlus size={20} />
+        <Sailboat size={20} />
         Daftar
       </button>
 
@@ -744,10 +783,10 @@ function LoginModal({
         </button>
 
         <div className="mb-7">
-          <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1f1a14] text-white">
+          <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#06243a] text-white">
             <Store />
           </div>
-          <h2 className="text-3xl font-black">Login AI POS</h2>
+          <h2 className="text-3xl font-black">Login aiman pos</h2>
           <p className="mt-2 text-sm leading-6 text-black/45">
             Masuk sebagai member, kasir, atau owner. Admin tetap hidden dan tidak
             ditampilkan di homepage.
@@ -757,7 +796,7 @@ function LoginModal({
         <form onSubmit={onSubmit} className="space-y-4">
           <label>
             <span className="text-sm font-bold text-black/60">Email</span>
-            <div className="mt-2 flex items-center gap-3 rounded-2xl border border-black/10 bg-[#fffaf0] px-4 py-4">
+            <div className="mt-2 flex items-center gap-3 rounded-2xl border border-black/10 bg-[#f0f9ff] px-4 py-4">
               <Mail size={18} className="text-black/35" />
               <input
                 value={email}
@@ -770,7 +809,7 @@ function LoginModal({
 
           <label>
             <span className="text-sm font-bold text-black/60">Password</span>
-            <div className="mt-2 flex items-center gap-3 rounded-2xl border border-black/10 bg-[#fffaf0] px-4 py-4">
+            <div className="mt-2 flex items-center gap-3 rounded-2xl border border-black/10 bg-[#f0f9ff] px-4 py-4">
               <Lock size={18} className="text-black/35" />
               <input
                 type={showPassword ? "text" : "password"}
@@ -795,17 +834,17 @@ function LoginModal({
             </div>
           )}
 
-          <button className="shine-button flex w-full items-center justify-center gap-2 rounded-2xl bg-[#1f1a14] px-6 py-4 font-black text-white">
+          <button className="shine-button flex w-full items-center justify-center gap-2 rounded-2xl bg-[#06243a] px-6 py-4 font-black text-white">
             Login
             <ArrowRight size={18} />
           </button>
         </form>
 
-        <div className="mt-5 rounded-2xl bg-[#fff5df] p-4 text-sm text-black/55">
+        <div className="mt-5 rounded-2xl bg-[#e0f2fe] p-4 text-sm text-black/55">
           <p className="font-bold text-black">Belum punya akun?</p>
           <button
             onClick={onOpenRegister}
-            className="mt-2 font-black text-[#9a681f]"
+            className="mt-2 font-black text-[#0369a1]"
           >
             Daftar member sekarang
           </button>
@@ -870,7 +909,7 @@ function RegisterModal({
         </button>
 
         <div className="mb-7">
-          <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#d6a84f] text-white">
+          <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0ea5e9] text-white">
             <UserPlus />
           </div>
           <h2 className="text-3xl font-black">Daftar Member</h2>
@@ -916,7 +955,7 @@ function RegisterModal({
           />
 
           <div className="md:col-span-2">
-            <label className="flex items-center gap-3 rounded-2xl bg-[#fff5df] p-4">
+            <label className="flex items-center gap-3 rounded-2xl bg-[#e0f2fe] p-4">
               <input
                 type="checkbox"
                 checked={form.useManualAddress}
@@ -947,7 +986,7 @@ function RegisterModal({
                       kosLocationId: e.target.value,
                     }))
                   }
-                  className="mt-2 w-full rounded-2xl border border-black/10 bg-[#fffaf0] px-4 py-4 outline-none"
+                  className="mt-2 w-full rounded-2xl border border-black/10 bg-[#f0f9ff] px-4 py-4 outline-none"
                 >
                   <option value="">Pilih titik lokasi</option>
                   {locations.map((location) => (
@@ -959,9 +998,9 @@ function RegisterModal({
               </label>
 
               {selectedLocation && (
-                <div className="md:col-span-2 overflow-hidden rounded-3xl border border-black/10 bg-[#fffaf0]">
+                <div className="md:col-span-2 overflow-hidden rounded-3xl border border-black/10 bg-[#f0f9ff]">
                   <div className="flex items-start gap-3 p-4">
-                    <MapPin className="mt-1 text-[#9a681f]" />
+                    <MapPin className="mt-1 text-[#0369a1]" />
                     <div>
                       <p className="font-black">{selectedLocation.label}</p>
                       <p className="text-sm text-black/50">
@@ -999,7 +1038,7 @@ function RegisterModal({
                 }
                 rows={4}
                 placeholder="Contoh: Kos Putra Mandiri, kamar 12, gang sebelah warung..."
-                className="mt-2 w-full resize-none rounded-2xl border border-black/10 bg-[#fffaf0] px-4 py-4 outline-none placeholder:text-black/30"
+                className="mt-2 w-full resize-none rounded-2xl border border-black/10 bg-[#f0f9ff] px-4 py-4 outline-none placeholder:text-black/30"
               />
             </label>
           )}
@@ -1015,7 +1054,7 @@ function RegisterModal({
               }
               rows={3}
               placeholder="Contoh: kalau pagar tertutup, chat dulu..."
-              className="mt-2 w-full resize-none rounded-2xl border border-black/10 bg-[#fffaf0] px-4 py-4 outline-none placeholder:text-black/30"
+              className="mt-2 w-full resize-none rounded-2xl border border-black/10 bg-[#f0f9ff] px-4 py-4 outline-none placeholder:text-black/30"
             />
           </label>
 
@@ -1025,7 +1064,7 @@ function RegisterModal({
             </div>
           )}
 
-          <button className="shine-button md:col-span-2 flex items-center justify-center gap-2 rounded-2xl bg-[#1f1a14] px-6 py-4 font-black text-white">
+          <button className="shine-button md:col-span-2 flex items-center justify-center gap-2 rounded-2xl bg-[#06243a] px-6 py-4 font-black text-white">
             Daftar & Masuk
             <ArrowRight size={18} />
           </button>
@@ -1033,7 +1072,7 @@ function RegisterModal({
 
         <div className="mt-5 text-center text-sm text-black/50">
           Sudah punya akun?{" "}
-          <button onClick={onOpenLogin} className="font-black text-[#9a681f]">
+          <button onClick={onOpenLogin} className="font-black text-[#0369a1]">
             Login
           </button>
         </div>
@@ -1063,7 +1102,7 @@ function FormInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="mt-2 w-full rounded-2xl border border-black/10 bg-[#fffaf0] px-4 py-4 outline-none placeholder:text-black/30"
+        className="mt-2 w-full rounded-2xl border border-black/10 bg-[#f0f9ff] px-4 py-4 outline-none placeholder:text-black/30"
       />
     </label>
   );
@@ -1071,9 +1110,9 @@ function FormInput({
 
 function StatCard({ title, value }: { title: string; value: string }) {
   return (
-    <div className="scroll-reveal rounded-3xl border border-black/10 bg-white/70 p-5 shadow-sm backdrop-blur">
-      <p className="text-sm text-black/45">{title}</p>
-      <p className="mt-2 text-xl font-black text-[#8a5a1c]">{value}</p>
+    <div className="scroll-reveal rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm backdrop-blur">
+      <p className="text-xs text-black/45">{title}</p>
+      <p className="mt-1 text-lg font-black text-[#075985]">{value}</p>
     </div>
   );
 }
@@ -1089,14 +1128,16 @@ function SectionTitle({
 }) {
   return (
     <div className="scroll-reveal">
-      <div className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.2em] text-[#9a681f]/70">
-        <BadgePercent size={17} />
+      <div className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-[#0369a1]/70">
+        <Shell size={15} />
         {eyebrow}
       </div>
-      <h2 className="text-3xl font-black tracking-tight text-[#1f1a14] md:text-5xl">
+      <h2 className="text-2xl font-black tracking-tight text-[#06243a] md:text-4xl">
         {title}
       </h2>
-      <p className="mt-3 max-w-2xl text-black/50">{description}</p>
+      <p className="mt-2 max-w-2xl text-sm leading-6 text-black/50">
+        {description}
+      </p>
     </div>
   );
 }
