@@ -1,5 +1,7 @@
 "use client";
 
+import ScrollReveal from "@/components/ScrollReveal";
+import { Article, initialArticles } from "@/data/articles";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -27,7 +29,6 @@ Sailboat,
 } from "lucide-react";
 import AiPosLogo from "@/components/AiPosLogo";
 import { products as initialProducts, Product } from "@/data/products";
-import { Article, initialArticles } from "@/data/articles";
 import { AppUser, initialUsers } from "@/data/users";
 import {
   initialLocationPoints,
@@ -194,32 +195,42 @@ export default function HomePage() {
     return;
   }
 
-  localStorage.setItem(
-    "aipos_current_user",
-    JSON.stringify({
-      id: user.id,
-      name: user.nickname || user.name,
-      fullName: user.fullName || user.name,
-      email: user.email,
-      role: user.role,
-      kosLocationId: user.kosLocationId,
-      kosLabel: user.kosLabel,
-      manualAddress: user.manualAddress,
-    })
-  );
+  const normalizedRole =
+  user.role === "cashier" || String(user.role).toLowerCase() === "kasir"
+    ? "cashier"
+    : user.role === "admin-master" || String(user.role).toLowerCase().includes("admin")
+      ? "admin-master"
+      : "member";
 
-  localStorage.setItem(
-    "youth_pos_user",
-    JSON.stringify({
-      id: user.id,
-      name: user.nickname || user.name,
-      fullName: user.fullName || user.name,
-      email: user.email,
-      role: user.role,
-    })
-  );
+localStorage.removeItem("aipos_current_user");
+localStorage.removeItem("youth_pos_user");
 
-  if (user.role === "admin-master") {
+localStorage.setItem(
+  "aipos_current_user",
+  JSON.stringify({
+    id: user.id,
+    name: user.nickname || user.name,
+    fullName: user.fullName || user.name,
+    email: user.email,
+    role: normalizedRole,
+    kosLocationId: user.kosLocationId,
+    kosLabel: user.kosLabel,
+    manualAddress: user.manualAddress,
+  })
+);
+
+localStorage.setItem(
+  "youth_pos_user",
+  JSON.stringify({
+    id: user.id,
+    name: user.nickname || user.name,
+    fullName: user.fullName || user.name,
+    email: user.email,
+    role: normalizedRole,
+  })
+);
+
+    if (user.role === "admin-master") {
     router.push("/admin-master");
     return;
   }
@@ -313,440 +324,315 @@ export default function HomePage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden ocean-bg text-[#06243a]">
-      <div className="pointer-events-none fixed inset-0 -z-10">
-  <div className="absolute left-[8%] top-[12%] h-80 w-80 rounded-full bg-cyan-300/45 blur-[110px] float-soft" />
-  <div className="absolute right-[6%] top-[20%] h-96 w-96 rounded-full bg-white/80 blur-[120px]" />
-  <div className="absolute bottom-[6%] left-[38%] h-72 w-72 rounded-full bg-blue-300/25 blur-[110px]" />
+  <main className="min-h-screen app-home-bg text-[#06243a]">
+    <nav className="sticky top-0 z-40 border-b border-sky-900/10 bg-white/80 backdrop-blur-2xl">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+        <AiPosLogo dark />
 
-  <span className="bubble left-[12%] top-[70%] h-5 w-5" />
-  <span className="bubble left-[24%] top-[78%] h-3 w-3" style={{ animationDelay: "1s" }} />
-  <span className="bubble right-[18%] top-[72%] h-6 w-6" style={{ animationDelay: "1.7s" }} />
-  <span className="bubble right-[32%] top-[82%] h-4 w-4" style={{ animationDelay: "2.4s" }} />
-</div>
-      
-      <nav className="sticky top-0 z-40 border-b border-black/10 bg-white/80 backdrop-blur-2xl">
-  <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-    <AiPosLogo dark />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={openLogin}
+            className="rounded-full border border-sky-900/10 bg-white px-4 py-2 text-xs font-black text-[#06243a] shadow-sm"
+          >
+            Login
+          </button>
 
-    <div className="hidden items-center gap-5 text-xs font-bold uppercase tracking-[0.14em] text-black/50 md:flex">
-      <a href="#promo" className="hover:text-[#0369a1]">
-        Promo
-      </a>
-      <a href="#best-seller" className="hover:text-[#0369a1]">
-        Best Seller
-      </a>
-      <a href="#stock" className="hover:text-[#0369a1]">
-        Stock
-      </a>
-    </div>
-
-    <div className="flex items-center gap-2">
-      <button
-        onClick={openLogin}
-        className="rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-black text-black shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-      >
-        Login
-      </button>
+          <button
+            onClick={openRegister}
+            className="rounded-full bg-[#06243a] px-4 py-2 text-xs font-black text-white shadow-md"
+          >
+            Daftar
+          </button>
+        </div>
+      </div>
+    </nav>
+<section id="promo" className="mx-auto max-w-6xl px-4 pb-2 pt-6">
+  <ScrollReveal direction="up">
+    <div className="mb-4 flex items-end justify-between">
+      <div>
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-sky-600">
+          Promo
+        </p>
+        <h2 className="text-2xl font-black text-[#06243a]">
+          Promo & Artikel
+        </h2>
+      </div>
 
       <button
         onClick={openRegister}
-        className="rounded-full bg-[#06243a] px-4 py-2 text-xs font-black text-white shadow-md transition hover:-translate-y-0.5"
+        className="text-sm font-black text-sky-700"
       >
         Daftar
       </button>
     </div>
-  </div>
-</nav>
+  </ScrollReveal>
 
-      <section className="mx-auto grid max-w-7xl items-center gap-8 px-4 pb-10 pt-10 lg:grid-cols-[1.05fr_0.95fr] lg:pt-14">
-        <div className="scroll-reveal">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#0ea5e9]/30 bg-white/70 px-4 py-2 text-sm font-black text-[#075985] shadow-sm">
-            <Waves size={16} />
-            Warung online dengan pickup cepat
-          </div>
-
-          <h1 className="max-w-3xl text-4xl font-black leading-[1] tracking-tight text-[#06243a] md:text-6xl">
-            Belanja menu favorit,{" "}
-            <span className="gold-gradient-text">cek stok live</span>, ambil di
-            warung.
-          </h1>
-
-          <p className="mt-5 max-w-2xl text-base leading-7 text-black/55">
-            aiman pos menampilkan promo, best seller, dan stok barang secara public.
-            Member bisa daftar, pilih kos atau isi alamat manual, lalu pesan
-            online untuk diambil di warung.
-          </p>
-
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <button
-              onClick={openRegister}
-              className="shine-button group inline-flex items-center justify-center gap-2 rounded-xl bg-[#06243a] px-5 py-3 text-sm font-black text-white shadow-xl shadow-black/15 transition hover:-translate-y-0.5"
-            >
-              Daftar Member
-              <ArrowRight
-                size={18}
-                className="transition group-hover:translate-x-1"
-              />
-            </button>
-
-            <a
-              href="#stock"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-black/10 bg-white/75 px-5 py-3 text-sm font-black text-black shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:shadow-md"
-            >
-              Cek Live Stock
-            </a>
-          </div>
-
-          <div className="mt-10 grid max-w-2xl gap-4 md:grid-cols-3">
-            <StatCard title="Produk" value={`${products.length} item`} />
-            <StatCard title="Promo" value={`${promoProducts.length} aktif`} />
-            <StatCard title="Stok Live" value={`${totalStock} pcs`} />
-          </div>
-        </div>
-
-        <div className="scroll-reveal ecom-card ecom-glow rounded-[2.5rem] p-5">
-          <div className="overflow-hidden rounded-[2rem] bg-[#06243a] text-white">
-            <div className="border-b border-white/10 p-5">
-              <p className="text-sm text-white/45">Live Catalogue</p>
-              <div className="mt-2 flex items-center justify-between">
-                <h2 className="text-2xl font-black">Hot Picks Hari Ini</h2>
-                <span className="rounded-full bg-emerald-400/15 px-4 py-2 text-sm font-bold text-emerald-200">
-                  Open
-                </span>
+  <div className="app-scroll flex gap-4 overflow-x-auto pb-3">
+    {activeArticles.map((article, index) => (
+      <ScrollReveal key={article.id} delay={index * 90} direction="right">
+        <button
+          type="button"
+          onClick={openRegister}
+          className={`min-w-[280px] max-w-[280px] overflow-hidden rounded-[1.7rem] bg-gradient-to-br ${article.gradient} p-5 text-left text-white shadow-lg transition hover:-translate-y-1 md:min-w-[360px] md:max-w-[360px]`}
+        >
+          <div className="mb-5 flex items-start justify-between gap-4">
+            <div>
+              <div className="mb-3 inline-flex rounded-full bg-black/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.15em]">
+                {article.category}
               </div>
-            </div>
 
-            <div className="space-y-3 p-5">
-              {bestSellers.slice(0, 3).map((item, index) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between rounded-3xl border border-white/10 bg-white/[0.06] p-4 transition hover:bg-white/[0.1]"
-                >
-                  <div className="flex items-center gap-4">
-                    <div
-                      className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${item.badgeColor} text-3xl`}
-                    >
-                      {item.image}
-                    </div>
+              <h3 className="text-xl font-black leading-tight">
+                {article.title}
+              </h3>
 
-                    <div>
-                      <p className="font-black">{item.name}</p>
-                      <p className="text-sm text-white/45">
-                        {formatRupiah(item.price)}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="text-right">
-                    <p className="text-xs text-white/35">Rank</p>
-                    <p className="text-xl font-black text-[#f7d892]">
-                      #{index + 1}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-4 grid grid-cols-2 gap-4">
-            <div className="rounded-3xl bg-white p-5 shadow-sm">
-              <p className="text-sm text-black/45">Stok Menipis</p>
-              <p className="mt-2 text-3xl font-black text-red-500">
-                {lowStock}
+              <p className="mt-2 line-clamp-2 text-sm text-white/80">
+                {article.subtitle}
               </p>
             </div>
 
-            <div className="rounded-3xl bg-white p-5 shadow-sm">
-              <p className="text-sm text-black/45">Pickup Area</p>
-              <p className="mt-2 text-3xl font-black text-[#0369a1]">Kos</p>
-            </div>
-          </div>
-        </div>
-      </section>
-<div className="relative h-20 overflow-hidden">
-  <div className="ocean-wave-layer" />
-</div>
-      <section className="border-y border-black/10 bg-white/45 py-4 backdrop-blur">
-        <div className="overflow-hidden">
-          <div className="marquee-track flex w-max gap-8 px-5 text-sm font-black uppercase tracking-[0.2em] text-black/45">
-            <span>Live Stock</span>
-            <span>Promo Harian</span>
-            <span>Pickup di Warung</span>
-            <span>Best Seller</span>
-            <span>Pesan dari Kos</span>
-            <span>Live Stock</span>
-            <span>Promo Harian</span>
-            <span>Pickup di Warung</span>
-            <span>Best Seller</span>
-            <span>Pesan dari Kos</span>
-          </div>
-        </div>
-      </section>
-
-      <section id="promo" className="mx-auto max-w-7xl px-5 py-16">
-        <SectionTitle
-          eyebrow="Promo"
-          title="Promo & Artikel Warung"
-          description="Banner promo yang bisa dikelola oleh admin-master."
-        />
-
-        <div className="mt-8 grid gap-5 lg:grid-cols-3">
-          {activeArticles.map((article, index) => (
-            <div
-              key={article.id}
-              className={`scroll-reveal group relative overflow-hidden rounded-[2rem] bg-gradient-to-br ${article.gradient} p-6 text-white shadow-2xl transition hover:-translate-y-1 ${
-                index === 0 ? "lg:col-span-2" : ""
-              }`}
-            >
-              <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-white/20 blur-3xl transition group-hover:scale-125" />
-              <div className="relative z-10 flex min-h-[250px] flex-col justify-between">
-                <div>
-                  <div className="mb-5 inline-flex rounded-full bg-black/20 px-4 py-2 text-xs font-black uppercase tracking-[0.18em]">
-                    {article.category}
-                  </div>
-                  <div className="flex items-start justify-between gap-5">
-                    <div>
-                      <h3
-                        className={`font-black leading-tight ${
-                          index === 0 ? "text-4xl md:text-5xl" : "text-3xl"
-                        }`}
-                      >
-                        {article.title}
-                      </h3>
-                      <p className="mt-4 max-w-xl text-white/80">
-                        {article.subtitle}
-                      </p>
-                    </div>
-                    <div className="rounded-[1.5rem] bg-white/20 p-4 text-5xl backdrop-blur">
-                      {article.image}
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  onClick={openRegister}
-                  className="mt-8 w-fit rounded-full bg-white px-5 py-3 text-sm font-black text-black"
-                >
-                  Daftar & Pesan
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section id="best-seller" className="mx-auto max-w-7xl px-5 py-16">
-        <SectionTitle
-          eyebrow="Paling Laris"
-          title="Best Seller"
-          description="Produk favorit pelanggan yang paling sering dibeli."
-        />
-
-        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {bestSellers.map((item, index) => (
-            <div
-              key={item.id}
-              className="scroll-reveal ecom-card group relative overflow-hidden rounded-[1.8rem] p-5 transition hover:-translate-y-1"
-            >
-              <div className="mb-8 flex items-start justify-between">
-                <div
-                  className={`flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br ${item.badgeColor} text-4xl shadow-xl`}
-                >
-                  {item.image}
-                </div>
-
-                <div className="rounded-full bg-[#0ea5e9]/15 px-3 py-1 text-sm font-black text-[#075985]">
-                  #{index + 1}
-                </div>
-              </div>
-
-              <p className="text-sm text-black/45">{item.category}</p>
-              <h3 className="mt-1 text-xl font-black">{item.name}</h3>
-
-              <div className="mt-5 flex items-end justify-between">
-                <div>
-                  <p className="text-sm text-black/45">Terjual</p>
-                  <p className="text-2xl font-black">{item.sold}</p>
-                </div>
-
-                <div className="flex items-center gap-1 rounded-full bg-yellow-400/25 px-3 py-2 text-yellow-700">
-                  <Star size={15} fill="currentColor" />
-                  <span className="text-sm font-bold">Hot</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-5 py-16">
-        <SectionTitle
-          eyebrow="Diskon"
-          title="Barang Lagi Promo"
-          description="Produk dengan harga spesial yang sedang berjalan."
-        />
-
-        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {promoProducts.map((item) => (
-            <div
-              key={item.id}
-              className="scroll-reveal ecom-card relative overflow-hidden rounded-[2rem] p-6 transition hover:-translate-y-1"
-            >
-              <div className="mb-6 flex items-center justify-between">
-                <div
-                  className={`flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-gradient-to-br ${item.badgeColor} text-5xl shadow-xl`}
-                >
-                  {item.image}
-                </div>
-
-                <div className="rounded-full bg-[#06243a] px-4 py-2 text-sm font-black text-white">
-                  -{item.discount}%
-                </div>
-              </div>
-
-              <p className="text-sm text-black/45">{item.sku}</p>
-              <h3 className="mt-1 text-2xl font-black">{item.name}</h3>
-              <p className="mt-1 text-black/50">{item.category}</p>
-
-              <div className="mt-6 flex items-end justify-between">
-                <div>
-                  {item.normalPrice && (
-                    <p className="text-sm text-black/35 line-through">
-                      {formatRupiah(item.normalPrice)}
-                    </p>
-                  )}
-                  <p className="text-2xl font-black text-[#0369a1]">
-                    {formatRupiah(item.price)}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-[#e0f2fe] px-4 py-3 text-right">
-                  <p className="text-xs text-black/40">Stock</p>
-                  <p className="font-black">{item.stock}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section id="stock" className="mx-auto max-w-7xl px-5 py-16 pb-28">
-        <div className="scroll-reveal ecom-card rounded-[2rem] p-5 md:p-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <SectionTitle
-              eyebrow="Live Stock"
-              title="Cek Stok Produk"
-              description="Cari produk berdasarkan nama, kategori, atau SKU tanpa login."
-            />
-
-            <div className="flex w-full items-center gap-3 rounded-3xl border border-black/10 bg-white px-5 py-4 shadow-sm lg:max-w-md">
-              <Search size={20} className="text-black/40" />
-              <input
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-                placeholder="Contoh: matcha, DRK-001, dessert..."
-                className="w-full bg-transparent text-black outline-none placeholder:text-black/35"
-              />
+            <div className="rounded-2xl bg-white/20 p-3 text-4xl backdrop-blur">
+              {article.image}
             </div>
           </div>
 
-          <div className="mt-8 grid gap-4">
-            {filteredProducts.map((item) => (
+          <span className="inline-flex rounded-full bg-white px-4 py-2 text-xs font-black text-black">
+            {article.ctaLabel || "Lihat Promo"}
+          </span>
+        </button>
+      </ScrollReveal>
+    ))}
+  </div>
+
+  {activeArticles.length === 0 && (
+    <div className="rounded-3xl border border-dashed border-sky-900/20 bg-white/70 p-8 text-center text-black/50">
+      Belum ada promo aktif.
+    </div>
+  )}
+</section>
+
+    <section className="mx-auto max-w-6xl px-4 py-6">
+      <ScrollReveal direction="zoom">
+      <div className="app-reveal rounded-[2rem] bg-gradient-to-br from-sky-500 to-cyan-400 p-5 text-white shadow-xl shadow-sky-500/20 md:p-7">
+        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="mb-2 text-sm font-bold text-white/80">
+              Selamat datang di AI POS
+            </p>
+
+            <h1 className="max-w-2xl text-3xl font-black leading-tight md:text-5xl">
+              Pesan dari kos, cek promo, ambil di warung.
+            </h1>
+
+            <p className="mt-3 max-w-xl text-sm leading-6 text-white/80 md:text-base">
+              Lihat menu, promo, best seller, dan daftar sebagai member untuk
+              pesan online.
+            </p>
+          </div>
+
+          <div className="hidden rounded-[1.8rem] bg-white/20 p-5 text-6xl backdrop-blur md:block">
+            🌊
+          </div>
+        </div>
+      </div>
+</ScrollReveal>
+<ScrollReveal delay={120}>
+      <div className="app-reveal mt-5 grid grid-cols-4 gap-3">
+        <button
+          onClick={openLogin}
+          className="app-card rounded-3xl p-4 text-center transition hover:-translate-y-1"
+        >
+          <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-100 text-sky-700">
+            🔐
+          </div>
+          <p className="text-xs font-black">Login</p>
+        </button>
+
+        <button
+          onClick={openRegister}
+          className="app-card hover-lift rounded-3xl p-4 text-center transition hover:-translate-y-1"
+        >
+          <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-100 text-cyan-700">
+            👤
+          </div>
+          <p className="text-xs font-black">Daftar</p>
+        </button>
+
+        <a
+          href="/stock"
+          className="app-card hover-lift rounded-3xl p-4 text-center transition hover:-translate-y-1"
+        >
+          <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-100 text-blue-700">
+            📦
+          </div>
+          <p className="text-xs font-black">Stock</p>
+        </a>
+
+        <a
+          href="#promo"
+          className="app-card hover-lift rounded-3xl p-4 text-center transition hover:-translate-y-1"
+        >
+          <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+            🎟️
+          </div>
+          <p className="text-xs font-black">Promo</p>
+        </a>
+      </div>
+    </ScrollReveal>  
+    </section>
+
+        <section id="best-seller" className="mx-auto max-w-6xl px-4 py-6">
+      <div className="mb-4 flex items-end justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-sky-600">
+            Paling Laris
+          </p>
+          <h2 className="text-2xl font-black">Best Seller</h2>
+        </div>
+
+        <a href="/stock" className="text-sm font-black text-sky-700">
+          Lihat stock
+        </a>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        {bestSellers.map((item, index) => (
+  <ScrollReveal key={item.id} delay={index * 80} direction="up">
+    <div className="app-card hover-lift rounded-[1.5rem] p-4 transition hover:-translate-y-1">
+            <div className="mb-4 flex items-start justify-between">
               <div
-                key={item.id}
-                className="scroll-reveal grid gap-4 rounded-3xl border border-black/10 bg-white/75 p-4 shadow-sm md:grid-cols-[1fr_auto_auto] md:items-center"
+                className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${item.badgeColor} text-3xl`}
               >
-                <div className="flex items-center gap-4">
-                  <div
-                    className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${item.badgeColor} text-4xl`}
-                  >
-                    {item.image}
-                  </div>
-
-                  <div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-lg font-black">{item.name}</h3>
-                      {item.isPromo && (
-                        <span className="rounded-full bg-[#0ea5e9]/20 px-3 py-1 text-xs font-bold text-[#075985]">
-                          Promo
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-sm text-black/45">
-                      {item.sku} · {item.category}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="md:text-right">
-                  <p className="text-sm text-black/40">Harga</p>
-                  <p className="font-black">{formatRupiah(item.price)}</p>
-                </div>
-
-                <div className="flex items-center justify-between gap-4 rounded-2xl bg-[#e0f2fe] px-4 py-3 md:min-w-44">
-                  <div>
-                    <p className="text-xs text-black/40">Stock</p>
-                    <p className="text-2xl font-black">{item.stock}</p>
-                  </div>
-
-                  {item.stock <= 10 ? (
-                    <span className="rounded-full bg-red-500/15 px-3 py-1 text-xs font-bold text-red-600">
-                      Menipis
-                    </span>
-                  ) : item.stock <= 20 ? (
-                    <span className="rounded-full bg-yellow-500/20 px-3 py-1 text-xs font-bold text-yellow-700">
-                      Medium
-                    </span>
-                  ) : (
-                    <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-700">
-                      Aman
-                    </span>
-                  )}
-                </div>
+                {item.image}
               </div>
-            ))}
-          </div>
+
+              <span className="rounded-full bg-sky-100 px-2 py-1 text-xs font-black text-sky-700">
+                #{index + 1}
+              </span>
+            </div>
+
+            <p className="text-xs text-black/45">{item.category}</p>
+            <h3 className="line-clamp-1 font-black">{item.name}</h3>
+
+            <div className="mt-3 flex items-end justify-between">
+              <div>
+                <p className="text-[11px] text-black/40">Harga</p>
+                <p className="text-sm font-black text-sky-700">
+                  {formatRupiah(item.price)}
+                </p>
+              </div>
+
+              <div className="text-right">
+                <p className="text-[11px] text-black/40">Terjual</p>
+                <p className="text-sm font-black">{item.sold}</p>
+              </div>
+            </div>
+              </div>
+  </ScrollReveal>
+))}
+      </div>
+    </section>
+
+    <section className="mx-auto max-w-6xl px-4 py-6 pb-20">
+      <div className="mb-4 flex items-end justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-sky-600">
+            Diskon
+          </p>
+          <h2 className="text-2xl font-black">Barang Promo</h2>
         </div>
-      </section>
 
-      <button
-        onClick={openRegister}
-        className="shine-button fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full bg-[#06243a] px-5 py-4 font-black text-white shadow-2xl shadow-black/25 transition hover:scale-105"
-      >
-        <Sailboat size={20} />
-        Daftar
-      </button>
+        <a href="/stock" className="text-sm font-black text-sky-700">
+          Semua produk
+        </a>
+      </div>
 
-      {modal === "login" && (
-        <LoginModal
-          email={loginEmail}
-          password={loginPassword}
-          showPassword={showPassword}
-          error={loginError}
-          setEmail={setLoginEmail}
-          setPassword={setLoginPassword}
-          setShowPassword={setShowPassword}
-          onSubmit={handleLogin}
-          onClose={closeModal}
-          onOpenRegister={openRegister}
-        />
-      )}
+      <div className="grid gap-3 md:grid-cols-3">
+        {promoProducts.map((item, index) => (
+  <ScrollReveal key={item.id} delay={index * 80} direction="left">
+    <div className="app-card hover-lift flex items-center gap-4 rounded-[1.5rem] p-4 transition hover:-translate-y-1">
+            <div
+              className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${item.badgeColor} text-4xl`}
+            >
+              {item.image}
+            </div>
 
-      {modal === "register" && (
-        <RegisterModal
-          form={registerForm}
-          setForm={setRegisterForm}
-          error={registerError}
-          locations={activeLocations}
-          selectedLocation={selectedLocation}
-          onSubmit={handleRegister}
-          onClose={closeModal}
-          onOpenLogin={openLogin}
-        />
-      )}
-    </main>
-  );
+            <div className="min-w-0 flex-1">
+              <div className="mb-1 flex items-center gap-2">
+                <span className="rounded-full bg-cyan-100 px-2 py-1 text-[10px] font-black text-sky-700">
+                  -{item.discount}%
+                </span>
+                <span className="text-xs text-black/40">{item.sku}</span>
+              </div>
+
+              <h3 className="line-clamp-1 font-black">{item.name}</h3>
+              <p className="text-sm font-black text-sky-700">
+                {formatRupiah(item.price)}
+              </p>
+
+              <p className="mt-1 text-xs text-black/45">
+                Stock {item.stock}
+              </p>
+            </div>
+              </div>
+  </ScrollReveal>
+))}
+      </div>
+    </section>
+
+    <div className="fixed bottom-4 left-1/2 z-40 w-[calc(100%-32px)] max-w-md -translate-x-1/2 rounded-full border border-sky-900/10 bg-white/90 p-2 shadow-2xl backdrop-blur-xl md:hidden">
+      <div className="grid grid-cols-3 gap-2">
+        <button
+          onClick={openLogin}
+          className="rounded-full px-4 py-3 text-xs font-black text-[#06243a]"
+        >
+          Login
+        </button>
+
+        <button
+          onClick={openRegister}
+          className="rounded-full bg-[#06243a] px-4 py-3 text-xs font-black text-white"
+        >
+          Daftar
+        </button>
+
+        <a
+          href="/stock"
+          className="rounded-full px-4 py-3 text-center text-xs font-black text-[#06243a]"
+        >
+          Stock
+        </a>
+      </div>
+    </div>
+
+    {modal === "login" && (
+      <LoginModal
+        email={loginEmail}
+        password={loginPassword}
+        showPassword={showPassword}
+        error={loginError}
+        setEmail={setLoginEmail}
+        setPassword={setLoginPassword}
+        setShowPassword={setShowPassword}
+        onSubmit={handleLogin}
+        onClose={closeModal}
+        onOpenRegister={openRegister}
+      />
+    )}
+
+    {modal === "register" && (
+      <RegisterModal
+        form={registerForm}
+        setForm={setRegisterForm}
+        error={registerError}
+        locations={activeLocations}
+        selectedLocation={selectedLocation}
+        onSubmit={handleRegister}
+        onClose={closeModal}
+        onOpenLogin={openLogin}
+      />
+    )}
+  </main>
+);
 }
 
 function LoginModal({

@@ -1,4 +1,5 @@
 "use client";
+import { MemberAddress } from "@/data/memberAddresses";
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -33,19 +34,18 @@ function formatRupiah(value: number) {
 
 export default function MemberPage() {
   const router = useRouter();
-
+  const [memberAddresses, setMemberAddresses] = useState<MemberAddress[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [locations, setLocations] = useState<LocationPoint[]>([]);
   const [orders, setOrders] = useState<OnlineOrder[]>([]);
   const [keyword, setKeyword] = useState("");
   const [cart, setCart] = useState<OnlineOrderItem[]>([]);
-  const [selectedLocationId, setSelectedLocationId] = useState<number | null>(
-    null
-  );
+  const [selectedLocationId, setSelectedLocationId] = useState<number | null>(null);
   const [customerNote, setCustomerNote] = useState("");
   const [successOrder, setSuccessOrder] = useState<OnlineOrder | null>(null);
-
+  
   useEffect(() => {
     const raw = localStorage.getItem("aipos_current_user");
 
@@ -87,6 +87,22 @@ export default function MemberPage() {
     if (savedOrders) {
       setOrders(JSON.parse(savedOrders));
     }
+    const savedAddresses = localStorage.getItem("aipos_member_addresses");
+
+if (savedAddresses) {
+  const parsedAddresses: MemberAddress[] = JSON.parse(savedAddresses);
+  setMemberAddresses(parsedAddresses);
+
+  const primaryAddress = parsedAddresses.find(
+    (item) =>
+      item.memberEmail.toLowerCase() === parsed.email.toLowerCase() &&
+      item.isPrimary
+  );
+
+  if (primaryAddress) {
+    setSelectedAddressId(primaryAddress.id);
+  }
+}
   }, [router]);
 
   useEffect(() => {
@@ -94,7 +110,12 @@ export default function MemberPage() {
   }, [orders]);
 
   const activeLocations = locations.filter((item) => item.isActive);
+  const userAddresses = memberAddresses.filter(
+  (item) => item.memberEmail.toLowerCase() === user?.email.toLowerCase()
+);
 
+const selectedAddress =
+  userAddresses.find((item) => item.id === selectedAddressId) || null;
   const filteredProducts = useMemo(() => {
     const q = keyword.toLowerCase();
 
@@ -207,11 +228,17 @@ export default function MemberPage() {
 
           <div className="flex items-center gap-3">
             <a
-              href="/choose-role"
-              className="rounded-2xl bg-white/10 px-4 py-3 text-sm font-bold hover:bg-white/15"
-            >
-              Pilih Role
-            </a>
+  href="/member/profile"
+  className="rounded-2xl bg-white/10 px-4 py-3 text-sm font-bold hover:bg-white/15"
+>
+  Profile
+</a>
+<a
+  href="/member/profile"
+  className="rounded-2xl bg-cyan-500 px-4 py-3 text-sm font-bold text-white"
+>
+  Kelola Alamat
+</a>
             <button
               onClick={logout}
               className="rounded-2xl bg-red-500/15 px-4 py-3 text-sm font-bold text-red-100"

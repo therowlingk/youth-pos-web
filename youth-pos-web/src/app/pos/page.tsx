@@ -90,45 +90,71 @@ export default function PosPage() {
   });
 
   useEffect(() => {
-  const userRaw =
-    localStorage.getItem("aipos_current_user") ||
-    localStorage.getItem("youth_pos_user");
+  const aiposRaw = localStorage.getItem("aipos_current_user");
+  const youthRaw = localStorage.getItem("youth_pos_user");
 
-  if (!userRaw) {
+  if (!aiposRaw && !youthRaw) {
     router.push("/");
     return;
   }
 
-  const user = JSON.parse(userRaw);
+  function safeParse(value: string | null) {
+    try {
+      return value ? JSON.parse(value) : null;
+    } catch {
+      return null;
+    }
+  }
 
-  const isCashier = user.role === "cashier" || user.role === "Kasir";
+  const aiposUser = safeParse(aiposRaw);
+  const youthUser = safeParse(youthRaw);
+
+  const users = [aiposUser, youthUser].filter(Boolean);
+
+  const isCashier = users.some((user) => {
+    const role = String(user.role || "").toLowerCase();
+
+    return (
+      role === "cashier" ||
+      role === "kasir" ||
+      role === "cashier-demo" ||
+      role.includes("cashier") ||
+      role.includes("kasir")
+    );
+  });
 
   if (!isCashier) {
+    console.log("Akses POS ditolak. Current users:", users);
     alert("Akses ditolak. Halaman POS khusus kasir.");
     router.push("/");
-  }
-}, [router]);
-
-  useEffect(() => {
-    if (products.length > 0) {
-      localStorage.setItem("youth_pos_products", JSON.stringify(products));
-    }
-  }, [products]);
-
-  useEffect(() => {
-  const userRaw = localStorage.getItem("youth_pos_user");
-
-  if (!userRaw) {
-    router.push("/login");
     return;
   }
 
-  const user = JSON.parse(userRaw);
+  const cashierUser =
+    users.find((user) => {
+      const role = String(user.role || "").toLowerCase();
+      return role === "cashier" || role === "kasir" || role.includes("kasir");
+    }) || users[0];
 
-  if (user.role !== "Kasir") {
-    alert("Akses ditolak. Halaman POS khusus Kasir.");
-    router.push("/login");
-  }
+  localStorage.setItem(
+    "aipos_current_user",
+    JSON.stringify({
+      id: cashierUser.id || Date.now(),
+      name: cashierUser.name || "Kasir",
+      email: cashierUser.email || "kasir@aipos.com",
+      role: "cashier",
+    })
+  );
+
+  localStorage.setItem(
+    "youth_pos_user",
+    JSON.stringify({
+      id: cashierUser.id || Date.now(),
+      name: cashierUser.name || "Kasir",
+      email: cashierUser.email || "kasir@aipos.com",
+      role: "cashier",
+    })
+  );
 }, [router]);
 
   const filteredProducts = useMemo(() => {

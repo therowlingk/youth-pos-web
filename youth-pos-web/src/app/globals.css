@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #080706;
-  --foreground: #ffffff;
+  --background: #f0f9ff;
+  --foreground: #06243a;
 }
 
 * {
@@ -21,234 +21,52 @@ body {
 }
 
 ::selection {
-  background: #d6b26e;
-  color: black;
+  background: #0ea5e9;
+  color: white;
 }
+
+/* =========================
+   GLOBAL GLASS STYLE
+========================= */
 
 .glass {
-  background: rgba(255, 255, 255, 0.075);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(24px);
-}
-
-.luxury-glass {
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.045)),
-    rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(28px);
-}
-
-.gold-text {
-  background: linear-gradient(90deg, #f7e7b6, #d6b26e, #fff7db);
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-.luxury-noise {
-  background-image:
-    radial-gradient(circle at 15% 20%, rgba(214, 178, 110, 0.22), transparent 32%),
-    radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.1), transparent 28%),
-    radial-gradient(circle at 70% 80%, rgba(214, 178, 110, 0.12), transparent 34%),
-    linear-gradient(135deg, #080706, #12100d 40%, #050505);
-}
-
-.grid-luxury {
-  background-image:
-    linear-gradient(rgba(214, 178, 110, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(214, 178, 110, 0.06) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(circle at center, black, transparent 75%);
-}
-
-@keyframes float-lux {
-  0% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-22px) rotate(4deg);
-  }
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-}
-
-@keyframes shine {
-  0% {
-    transform: translateX(-130%);
-  }
-  100% {
-    transform: translateX(130%);
-  }
-}
-
-@keyframes reveal-up {
-  from {
-    opacity: 0;
-    transform: translateY(38px) scale(0.98);
-    filter: blur(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0px) scale(1);
-    filter: blur(0);
-  }
-}
-
-.animate-float-lux {
-  animation: float-lux 8s ease-in-out infinite;
-}
-
-.reveal-card {
-  animation: reveal-up 0.85s ease both;
-  animation-timeline: view();
-  animation-range: entry 0% cover 32%;
-}
-
-.shine-effect {
-  position: relative;
-  overflow: hidden;
-}
-
-.shine-effect::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  width: 45%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.28),
-    transparent
-  );
-  transform: translateX(-130%);
-  animation: shine 4.5s ease-in-out infinite;
-}
-.ecom-bg {
-  background:
-    radial-gradient(circle at 12% 15%, rgba(255, 218, 151, 0.55), transparent 28%),
-    radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.9), transparent 26%),
-    radial-gradient(circle at 75% 85%, rgba(255, 195, 113, 0.3), transparent 32%),
-    linear-gradient(135deg, #fffaf0 0%, #fff4de 42%, #f9efe0 100%);
-}
-
-.ecom-card {
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(120, 78, 28, 0.12);
   backdrop-filter: blur(24px);
-  box-shadow: 0 24px 80px rgba(77, 47, 16, 0.12);
 }
 
-.ecom-glow {
-  box-shadow:
-    0 20px 70px rgba(214, 168, 79, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-.gold-gradient-text {
-  background: linear-gradient(90deg, #7b4f13, #d6a84f, #9a681f);
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-@keyframes soft-float {
-  0% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-18px) rotate(3deg);
-  }
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-}
-
-@keyframes scroll-pop {
-  from {
-    opacity: 0;
-    transform: translateY(38px) scale(0.96);
-    filter: blur(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
-}
-
-@keyframes marquee-slow {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.float-soft {
-  animation: soft-float 7s ease-in-out infinite;
-}
-
-.scroll-reveal {
-  animation: scroll-pop 0.85s ease both;
-  animation-timeline: view();
-  animation-range: entry 0% cover 30%;
-}
-
-.marquee-track {
-  animation: marquee-slow 22s linear infinite;
-}
-
-.shine-button {
-  position: relative;
-  overflow: hidden;
-}
-
-.shine-button::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  width: 45%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.55),
-    transparent
-  );
-  transform: translateX(-140%);
-  animation: shine 4s ease-in-out infinite;
-}
-
-@keyframes shine {
-  0% {
-    transform: translateX(-140%);
-  }
-  100% {
-    transform: translateX(240%);
-  }
-}
-.ocean-bg,
-.ecom-bg {
+.ocean-bg {
   background:
-    radial-gradient(circle at 12% 15%, rgba(125, 211, 252, 0.65), transparent 28%),
-    radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.95), transparent 26%),
-    radial-gradient(circle at 72% 82%, rgba(14, 165, 233, 0.25), transparent 34%),
-    linear-gradient(135deg, #ecfeff 0%, #e0f2fe 38%, #f8fafc 100%);
+    radial-gradient(circle at 10% 10%, rgba(125, 211, 252, 0.38), transparent 25%),
+    radial-gradient(circle at 88% 18%, rgba(34, 211, 238, 0.28), transparent 28%),
+    radial-gradient(circle at 72% 82%, rgba(14, 165, 233, 0.18), transparent 34%),
+    linear-gradient(180deg, #f0f9ff 0%, #ffffff 42%, #f8fafc 100%);
+}
+
+.app-home-bg {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(125, 211, 252, 0.35), transparent 24%),
+    radial-gradient(circle at 90% 20%, rgba(34, 211, 238, 0.25), transparent 28%),
+    linear-gradient(180deg, #f0f9ff 0%, #ffffff 42%, #f8fafc 100%);
 }
 
 .ocean-card,
-.ecom-card {
-  background: rgba(255, 255, 255, 0.76);
-  border: 1px solid rgba(14, 116, 144, 0.14);
-  backdrop-filter: blur(24px);
-  box-shadow: 0 24px 80px rgba(3, 105, 161, 0.14);
+.app-card {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(2, 132, 199, 0.1);
+  box-shadow: 0 14px 45px rgba(2, 132, 199, 0.08);
+  backdrop-filter: blur(18px);
 }
 
-.ocean-glow,
-.ecom-glow {
+.ocean-glow {
   box-shadow:
     0 20px 80px rgba(14, 165, 233, 0.26),
     inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.app-chip {
+  background: rgba(224, 242, 254, 0.9);
+  border: 1px solid rgba(14, 165, 233, 0.14);
 }
 
 .ocean-gradient-text,
@@ -258,13 +76,37 @@ body {
   color: transparent;
 }
 
+.text-gradient {
+  background: linear-gradient(90deg, #0369a1, #06b6d4, #0f766e);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+.app-scroll {
+  scrollbar-width: none;
+}
+
+.app-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
 @keyframes ocean-float {
   0% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
   }
+
   50% {
     transform: translateY(-18px) translateX(10px) rotate(3deg);
   }
+
   100% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
   }
@@ -274,9 +116,11 @@ body {
   0% {
     transform: translateX(-20%) translateY(0);
   }
+
   50% {
     transform: translateX(0%) translateY(-8px);
   }
+
   100% {
     transform: translateX(-20%) translateY(0);
   }
@@ -287,36 +131,71 @@ body {
     transform: translateY(40px) scale(0.8);
     opacity: 0;
   }
+
   30% {
     opacity: 0.45;
   }
+
   100% {
     transform: translateY(-80px) scale(1.1);
     opacity: 0;
   }
 }
 
-@keyframes scroll-pop {
+@keyframes app-fade-up {
   from {
     opacity: 0;
-    transform: translateY(36px) scale(0.96);
-    filter: blur(8px);
+    transform: translateY(18px);
   }
+
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
+    transform: translateY(0);
   }
 }
+
+@keyframes marquee-slow {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-140%);
+  }
+
+  100% {
+    transform: translateX(240%);
+  }
+}
+
+/* =========================
+   ANIMATION CLASSES
+========================= */
 
 .float-soft {
   animation: ocean-float 7s ease-in-out infinite;
 }
 
-.scroll-reveal {
-  animation: scroll-pop 0.85s ease both;
-  animation-timeline: view();
-  animation-range: entry 0% cover 30%;
+.app-reveal {
+  animation: app-fade-up 0.55s ease both;
+}
+
+.marquee-track {
+  animation: marquee-slow 22s linear infinite;
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(14, 165, 233, 0.18);
+  animation: bubble-up 5s ease-in-out infinite;
 }
 
 .ocean-wave-layer {
@@ -334,33 +213,18 @@ body {
   pointer-events: none;
 }
 
-.bubble {
-  position: absolute;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(14, 165, 233, 0.18);
-  animation: bubble-up 5s ease-in-out infinite;
-}
+/* =========================
+   BUTTON EFFECT
+========================= */
 
-.marquee-track {
-  animation: marquee-slow 22s linear infinite;
-}
-
-@keyframes marquee-slow {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.shine-button {
+.shine-button,
+.shine-effect {
   position: relative;
   overflow: hidden;
 }
 
-.shine-button::after {
+.shine-button::after,
+.shine-effect::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -375,11 +239,69 @@ body {
   animation: shine 4s ease-in-out infinite;
 }
 
-@keyframes shine {
-  0% {
-    transform: translateX(-140%);
-  }
-  100% {
-    transform: translateX(240%);
-  }
+/* =========================
+   HOVER / TAP EFFECT
+========================= */
+
+.hover-lift {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 24px 70px rgba(2, 132, 199, 0.18);
+  border-color: rgba(14, 165, 233, 0.28);
+}
+
+.tap-effect {
+  transition: transform 0.15s ease;
+}
+
+.tap-effect:active {
+  transform: scale(0.96);
+}
+
+/* =========================
+   BACKWARD COMPATIBILITY
+   Biar class lama tidak error
+========================= */
+
+.ecom-bg {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(125, 211, 252, 0.35), transparent 24%),
+    radial-gradient(circle at 90% 20%, rgba(34, 211, 238, 0.25), transparent 28%),
+    linear-gradient(180deg, #f0f9ff 0%, #ffffff 42%, #f8fafc 100%);
+}
+
+.ecom-card {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(2, 132, 199, 0.1);
+  box-shadow: 0 14px 45px rgba(2, 132, 199, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.ecom-glow {
+  box-shadow:
+    0 20px 80px rgba(14, 165, 233, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.gold-text {
+  background: linear-gradient(90deg, #0369a1, #06b6d4, #0f766e);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.luxury-glass {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(2, 132, 199, 0.1);
+  box-shadow: 0 14px 45px rgba(2, 132, 199, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.reveal-card {
+  animation: app-fade-up 0.55s ease both;
 }
